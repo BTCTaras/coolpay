@@ -56,8 +56,6 @@ class FloatingScheduler implements Runnable {
                 Optional<Player> p = Sponge.getServer().getPlayer(UUID.fromString(uuid));
                 if (in > 0) {
 
-
-
                     if (in > 15000) {
 
                         int old = Coolpay.rootNode.getNode("players", uuid, "balance").getInt();
