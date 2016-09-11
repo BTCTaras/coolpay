@@ -16,27 +16,26 @@ class FloatingScheduler implements Runnable {
     /*
     //FIXME: stacktrace
     22:44:49 ERROR] [Sponge]: The Scheduler tried to run the task coolpay-S-0 owned by Plugin{id=coolpay, name=CoolPay, version=1.0, description=An example plugin, source=mods/coolpay-all-1.0-SNAPSHOT.jar}, but an error occured.
-java.lang.NullPointerException
-	at me.acul.coolpay.FloatingScheduler.run(FloatingScheduler.java:89) ~[FloatingScheduler.class:?]
-	at org.spongepowered.api.scheduler.Task$Builder.lambda$execute$8(Task.java:138) ~[Task$Builder.class:1.8.9-4.2.0-BETA-350]
-	at org.spongepowered.common.scheduler.SchedulerBase.lambda$startTask$291(SchedulerBase.java:177) ~[SchedulerBase.class:1.8.9-4.2.0-BETA-350]
-	at org.spongepowered.common.scheduler.SyncScheduler.executeTaskRunnable(SyncScheduler.java:66) ~[SyncScheduler.class:1.8.9-4.2.0-BETA-350]
-	at org.spongepowered.common.scheduler.SchedulerBase.startTask(SchedulerBase.java:174) ~[SchedulerBase.class:1.8.9-4.2.0-BETA-350]
-	at org.spongepowered.common.scheduler.SchedulerBase.processTask(SchedulerBase.java:160) ~[SchedulerBase.class:1.8.9-4.2.0-BETA-350]
-	at java.util.concurrent.ConcurrentHashMap$ValuesView.forEach(ConcurrentHashMap.java:4707) [?:1.8.0_71]
-	at org.spongepowered.common.scheduler.SchedulerBase.runTick(SchedulerBase.java:104) [SchedulerBase.class:1.8.9-4.2.0-BETA-350]
-	at org.spongepowered.common.scheduler.SyncScheduler.tick(SyncScheduler.java:41) [SyncScheduler.class:1.8.9-4.2.0-BETA-350]
-	at org.spongepowered.common.scheduler.SpongeScheduler.tickSyncScheduler(SpongeScheduler.java:191) [SpongeScheduler.class:1.8.9-4.2.0-BETA-350]
-	at net.minecraft.server.dedicated.DedicatedServer.handler$onTick$0(SourceFile:85) [ko.class:?]
-	at net.minecraft.server.dedicated.DedicatedServer.func_71190_q(SourceFile:301) [ko.class:?]
-	at net.minecraft.server.MinecraftServer.func_71217_p(SourceFile:535) [MinecraftServer.class:?]
-	at net.minecraft.server.MinecraftServer.run(SourceFile:451) [MinecraftServer.class:?]
-	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_71]
-     */
+    java.lang.NullPointerException
+    at me.acul.coolpay.FloatingScheduler.run(FloatingScheduler.java:89) ~[FloatingScheduler.class:?]
+    at org.spongepowered.api.scheduler.Task$Builder.lambda$execute$8(Task.java:138) ~[Task$Builder.class:1.8.9-4.2.0-BETA-350]
+    at org.spongepowered.common.scheduler.SchedulerBase.lambda$startTask$291(SchedulerBase.java:177) ~[SchedulerBase.class:1.8.9-4.2.0-BETA-350]
+    at org.spongepowered.common.scheduler.SyncScheduler.executeTaskRunnable(SyncScheduler.java:66) ~[SyncScheduler.class:1.8.9-4.2.0-BETA-350]
+    at org.spongepowered.common.scheduler.SchedulerBase.startTask(SchedulerBase.java:174) ~[SchedulerBase.class:1.8.9-4.2.0-BETA-350]
+    at org.spongepowered.common.scheduler.SchedulerBase.processTask(SchedulerBase.java:160) ~[SchedulerBase.class:1.8.9-4.2.0-BETA-350]
+    at java.util.concurrent.ConcurrentHashMap$ValuesView.forEach(ConcurrentHashMap.java:4707) [?:1.8.0_71]
+    at org.spongepowered.common.scheduler.SchedulerBase.runTick(SchedulerBase.java:104) [SchedulerBase.class:1.8.9-4.2.0-BETA-350]
+    at org.spongepowered.common.scheduler.SyncScheduler.tick(SyncScheduler.java:41) [SyncScheduler.class:1.8.9-4.2.0-BETA-350]
+    at org.spongepowered.common.scheduler.SpongeScheduler.tickSyncScheduler(SpongeScheduler.java:191) [SpongeScheduler.class:1.8.9-4.2.0-BETA-350]
+    at net.minecraft.server.dedicated.DedicatedServer.handler$onTick$0(SourceFile:85) [ko.class:?]
+    at net.minecraft.server.dedicated.DedicatedServer.func_71190_q(SourceFile:301) [ko.class:?]
+    at net.minecraft.server.MinecraftServer.func_71217_p(SourceFile:535) [MinecraftServer.class:?]
+    at net.minecraft.server.MinecraftServer.run(SourceFile:451) [MinecraftServer.class:?]
+    at java.lang.Thread.run(Thread.java:745) [?:1.8.0_71]
+    */
 
     @Override
     public void run() {
-        //Fixme: This seems to do not work, I currently don't have time to investigate further.
         if (!Coolpay.rootNode.getNode("players").isVirtual()) {
             //Check if there's any money going in
             Map<String, Map> addresses = (Map) Coolpay.rootNode.getNode("players").getValue();
@@ -75,9 +74,10 @@ java.lang.NullPointerException
                 Map.Entry pair = (Map.Entry) o;
                 String uuid = (String) pair.getKey();
                 int in = Coolpay.rootNode.getNode("floating", uuid, "in").getInt();
+                Optional<Player> p = Sponge.getServer().getPlayer(UUID.fromString(uuid));
                 if (in > 0) {
 
-                    Optional<Player> p = Sponge.getServer().getPlayer(UUID.fromString(uuid));
+
 
                     if (in > 15000) {
 
@@ -105,9 +105,9 @@ java.lang.NullPointerException
 
                         }
                     }
-
+                }
+                if(!Coolpay.rootNode.getNode("floating",uuid,"out").isVirtual()){
                     Map<String, Integer> out = (Map) Coolpay.rootNode.getNode("floating", uuid, "out").getValue();
-
                     for (Object i : out.entrySet()) {
 
                         Map.Entry a = (Map.Entry) i;
@@ -149,7 +149,6 @@ java.lang.NullPointerException
 
                                 }
                             }
-
                         }
                     }
                 }
