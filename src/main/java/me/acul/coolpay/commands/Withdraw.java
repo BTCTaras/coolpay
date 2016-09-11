@@ -52,7 +52,7 @@ public class Withdraw implements CommandExecutor {
                 Integer balance = Coolpay.rootNode.getNode("players", uuid, "balance").getInt();
                 if (transfer < 0) {
                     ex.sendMessage(Text.builder("[CoolPay] You can't withdraw negative KST.").color(TextColors.RED).build());
-                    return null;
+                    return CommandResult.success();
                 }
 
                 if (balance >= transfer) {
@@ -70,7 +70,7 @@ public class Withdraw implements CommandExecutor {
 
         }
 
-        return null;
+        return CommandResult.success();
     }
 
 }

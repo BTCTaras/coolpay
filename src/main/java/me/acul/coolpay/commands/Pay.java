@@ -56,7 +56,7 @@ Caused by: java.lang.NullPointerException
                 String fromUUID = ex.getUniqueId().toString();
                 if (amt < 0) {
                     ex.sendMessage(Text.builder("[CoolPay] You can't send negative KST").color(TextColors.RED).build());
-                    return null;
+                    return CommandResult.success();
                 }
 
                 if (Coolpay.rootNode.getNode("players", fromUUID, "balance").getInt() >= amt) {
@@ -77,7 +77,7 @@ Caused by: java.lang.NullPointerException
 
         }
 
-        return null;
+        return CommandResult.success();
     }
 
 }
