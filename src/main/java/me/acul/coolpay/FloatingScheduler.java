@@ -12,6 +12,28 @@ import java.util.UUID;
 
 
 class FloatingScheduler implements Runnable {
+
+    /*
+    //FIXME: stacktrace
+    22:44:49 ERROR] [Sponge]: The Scheduler tried to run the task coolpay-S-0 owned by Plugin{id=coolpay, name=CoolPay, version=1.0, description=An example plugin, source=mods/coolpay-all-1.0-SNAPSHOT.jar}, but an error occured.
+java.lang.NullPointerException
+	at me.acul.coolpay.FloatingScheduler.run(FloatingScheduler.java:89) ~[FloatingScheduler.class:?]
+	at org.spongepowered.api.scheduler.Task$Builder.lambda$execute$8(Task.java:138) ~[Task$Builder.class:1.8.9-4.2.0-BETA-350]
+	at org.spongepowered.common.scheduler.SchedulerBase.lambda$startTask$291(SchedulerBase.java:177) ~[SchedulerBase.class:1.8.9-4.2.0-BETA-350]
+	at org.spongepowered.common.scheduler.SyncScheduler.executeTaskRunnable(SyncScheduler.java:66) ~[SyncScheduler.class:1.8.9-4.2.0-BETA-350]
+	at org.spongepowered.common.scheduler.SchedulerBase.startTask(SchedulerBase.java:174) ~[SchedulerBase.class:1.8.9-4.2.0-BETA-350]
+	at org.spongepowered.common.scheduler.SchedulerBase.processTask(SchedulerBase.java:160) ~[SchedulerBase.class:1.8.9-4.2.0-BETA-350]
+	at java.util.concurrent.ConcurrentHashMap$ValuesView.forEach(ConcurrentHashMap.java:4707) [?:1.8.0_71]
+	at org.spongepowered.common.scheduler.SchedulerBase.runTick(SchedulerBase.java:104) [SchedulerBase.class:1.8.9-4.2.0-BETA-350]
+	at org.spongepowered.common.scheduler.SyncScheduler.tick(SyncScheduler.java:41) [SyncScheduler.class:1.8.9-4.2.0-BETA-350]
+	at org.spongepowered.common.scheduler.SpongeScheduler.tickSyncScheduler(SpongeScheduler.java:191) [SpongeScheduler.class:1.8.9-4.2.0-BETA-350]
+	at net.minecraft.server.dedicated.DedicatedServer.handler$onTick$0(SourceFile:85) [ko.class:?]
+	at net.minecraft.server.dedicated.DedicatedServer.func_71190_q(SourceFile:301) [ko.class:?]
+	at net.minecraft.server.MinecraftServer.func_71217_p(SourceFile:535) [MinecraftServer.class:?]
+	at net.minecraft.server.MinecraftServer.run(SourceFile:451) [MinecraftServer.class:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_71]
+     */
+
     @Override
     public void run() {
         //Fixme: This seems to do not work, I currently don't have time to investigate further.
@@ -27,10 +49,11 @@ class FloatingScheduler implements Runnable {
                 if (balance > 0) {
                     String master = Krist.makeV2Address(Coolpay.rootNode.getNode("masterpass").getString());
                     System.out.println("Transmitted " + balance + " from " + address + " to " + master);
-                    if (!Krist.transact(Coolpay.rootNode.getNode("players", uuid, "pass").getString(), master, balance)) {
+                    TransactionResult res = Krist.transact(Coolpay.rootNode.getNode("players", uuid, "pass").getString(), master, balance);
+                    if (!res.ok) {
                         Optional<Player> p = Sponge.getServer().getPlayer(UUID.fromString(uuid));
                         if (p.isPresent()) {
-                            p.get().sendMessage(Text.builder("[CoolPay] Sorry! There has been a problem with your deposit, if this message keeps reappearing, please ask  an admin to help you!").color(TextColors.RED).build());
+                            p.get().sendMessage(Text.builder("[CoolPay] Sorry! There has been a problem with your deposit, if this message keeps reappearing, please ask  an admin to help you! Error: " + res.error).color(TextColors.RED).build());
                         }
 
                     } else {
@@ -92,7 +115,8 @@ class FloatingScheduler implements Runnable {
                         Integer amount = (Integer) a.getValue();
 
                         if (amount > 15000) {
-                            if (Krist.transact(Coolpay.rootNode.getNode("masterpass").getString(), to, 15000)) {
+                            TransactionResult res = Krist.transact(Coolpay.rootNode.getNode("masterpass").getString(), to, 15000);
+                            if (res.ok) {
 
                                 Coolpay.rootNode.getNode("floating", uuid, "out", to).setValue(amount - 15000);
                                 Coolpay.saveConfig();
@@ -105,8 +129,8 @@ class FloatingScheduler implements Runnable {
 
                             }
                         } else {
-
-                            if (Krist.transact(Coolpay.rootNode.getNode("masterpass").getString(), to, amount)) {
+                            TransactionResult res = Krist.transact(Coolpay.rootNode.getNode("masterpass").getString(), to, amount);
+                            if (res.ok) {
 
                                 Coolpay.rootNode.getNode("floating", uuid, "out", to).setValue(0);
                                 Coolpay.saveConfig();
@@ -121,7 +145,7 @@ class FloatingScheduler implements Runnable {
 
                                 if (p.isPresent()) {
 
-                                    p.get().sendMessage(Text.builder("[CoolPay] There has been a problem with your transaction, if this message keeps reappearing please contact an admin!").color(TextColors.RED).build());
+                                    p.get().sendMessage(Text.builder("[CoolPay] There has been a problem with your transaction, if this message keeps reappearing please contact an admin! Error: " + res.error).color(TextColors.RED).build());
 
                                 }
                             }

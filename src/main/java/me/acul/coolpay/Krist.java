@@ -36,7 +36,7 @@ public class Krist {
 
     }
 
-    public static boolean transact(String password, String to, int amount) {
+    public static TransactionResult transact(String password, String to, int amount) {
 
         JSONObject body = new JSONObject();
         body.put("privatekey", password);
@@ -44,8 +44,12 @@ public class Krist {
         body.put("amount", amount);
         String returnData = post("http://krist.ceriat.net/transactions/", body);
         JSONObject json = (JSONObject) new JSONTokener(returnData).nextValue();
-        return json.getBoolean("ok");
-
+        TransactionResult success = new TransactionResult();
+        success.ok = json.getBoolean("ok");
+        if(!success.ok) {
+            success.error = json.getString("error");
+        }
+        return success;
     }
 
     static int getBalance(String address) {
