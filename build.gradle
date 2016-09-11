@@ -1,0 +1,21 @@
+
+plugins {
+    id 'org.spongepowered.plugin' version '0.6'
+}
+
+apply plugin: 'idea'
+
+group = 'me.acul.coolpay'
+version = '1.0-SNAPSHOT'
+description = 'An example plugin'
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:4.1.0'
+    compile 'org.json:json:20160212'
+}
+
+task fatJar(type: Jar) {
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
