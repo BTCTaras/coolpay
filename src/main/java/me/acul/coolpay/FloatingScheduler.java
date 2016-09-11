@@ -27,7 +27,7 @@ class FloatingScheduler implements Runnable {
                 if (balance > 0) {
                     String master = Krist.makeV2Address(Coolpay.rootNode.getNode("masterpass").getString());
                     System.out.println("Transmitted " + balance + " from " + address + " to " + master);
-                    if (Krist.transact(Coolpay.rootNode.getNode("players", uuid, "pass").getString(), master, balance)) {
+                    if (!Krist.transact(Coolpay.rootNode.getNode("players", uuid, "pass").getString(), master, balance)) {
                         Optional<Player> p = Sponge.getServer().getPlayer(UUID.fromString(uuid));
                         if (p.isPresent()) {
                             p.get().sendMessage(Text.builder("[CoolPay] Sorry! There has been a problem with your deposit, if this message keeps reappearing, please ask  an admin to help you!").color(TextColors.RED).build());
