@@ -107,7 +107,7 @@ class FloatingScheduler implements Runnable {
                                 }
 
                             }
-                        } else {
+                        } else if(amount > 0) {
                             TransactionResult res = Krist.transact(Coolpay.rootNode.getNode("masterpass").getString(), to, amount);
                             if (res.ok) {
 
