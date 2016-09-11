@@ -151,10 +151,6 @@ public class Coolpay {
             String address = Krist.makeV2Address(pass);
             rootNode.getNode("players", uuid, "balance").setValue(0);
             rootNode.getNode("players", uuid, "pass").setValue(pass);
-            //TODO: Remove this part after testing
-            Map<String, String> addresses = (Map) rootNode.getNode("addresses").getValue();
-            addresses.put(uuid, address);
-            rootNode.getNode("addresses").setValue(addresses);
             saveConfig();
             Task.Builder taskBuilder = scheduler.createTaskBuilder();
             taskBuilder.delayTicks(1);
