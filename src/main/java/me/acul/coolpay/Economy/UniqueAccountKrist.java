@@ -14,10 +14,7 @@ import org.spongepowered.api.text.Text;
 import sun.util.resources.cldr.ebu.CurrencyNames_ebu;
 
 import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Luca on 12.09.16.
@@ -91,7 +88,9 @@ public class UniqueAccountKrist implements UniqueAccount {
 
     @Override
     public Map<Currency, BigDecimal> getBalances(Set<Context> contexts) {
-        return null;
+        Map<Currency, BigDecimal> res = new HashMap<Currency,BigDecimal>();
+        res.put(new CurrencyKrist(), getBalance(new CurrencyKrist()));
+        return res;
     }
 
     @Override
