@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 /**
  * Created by Luca on 12.09.16.
  */
-public class CurrencyKrist implements Currency {
+@SuppressWarnings("DefaultFileTemplate")
+class CurrencyKrist implements Currency {
 
     @Override
     public Text getDisplayName() {
@@ -27,7 +28,7 @@ public class CurrencyKrist implements Currency {
 
     @Override
     public Text format(BigDecimal amount, int numFractionDigits) {
-        return Text.of(String.format("%,d", amount) + " " + getSymbol());
+        return Text.of(String.format("%,d", amount.intValueExact()) + " " + getSymbol());
     }
 
     @Override

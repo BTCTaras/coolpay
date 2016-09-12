@@ -12,7 +12,8 @@ import java.util.*;
 /**
  * Created by Luca on 12.09.16.
  */
-public class EconomyServiceKrist implements EconomyService{
+@SuppressWarnings("DefaultFileTemplate")
+class EconomyServiceKrist implements EconomyService{
     @Override
     public Currency getDefaultCurrency() {
         return new CurrencyKrist();
@@ -20,7 +21,7 @@ public class EconomyServiceKrist implements EconomyService{
 
     @Override
     public Set<Currency> getCurrencies() {
-        return new HashSet<Currency>(Arrays.asList(getDefaultCurrency()));
+        return new HashSet<>(Collections.singletonList(getDefaultCurrency()));
     }
 
     @Override

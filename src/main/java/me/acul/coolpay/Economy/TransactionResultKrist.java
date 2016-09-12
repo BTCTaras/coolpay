@@ -13,10 +13,11 @@ import java.util.Set;
 /**
  * Created by Luca on 12.09.16.
  */
-public class TransactionResultKrist implements TransactionResult {
+@SuppressWarnings("DefaultFileTemplate")
+class TransactionResultKrist implements TransactionResult {
 
-    Object Account;
-    BigDecimal Amount;
+    private final Object Account;
+    private final BigDecimal Amount;
 
     public TransactionResultKrist(Object Acc, BigDecimal amt) {
         Account = Acc;

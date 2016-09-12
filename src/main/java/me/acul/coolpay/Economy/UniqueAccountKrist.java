@@ -11,7 +11,6 @@ import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.service.economy.transaction.TransactionResult;
 import org.spongepowered.api.service.economy.transaction.TransferResult;
 import org.spongepowered.api.text.Text;
-import sun.util.resources.cldr.ebu.CurrencyNames_ebu;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -20,9 +19,10 @@ import java.util.*;
  * Created by Luca on 12.09.16.
  */
 
-public class UniqueAccountKrist implements UniqueAccount {
+@SuppressWarnings("DefaultFileTemplate")
+class UniqueAccountKrist implements UniqueAccount {
 
-    private Object uuid;
+    private final Object uuid;
 
     public UniqueAccountKrist(Object id) {
         uuid = id;
@@ -58,44 +58,42 @@ public class UniqueAccountKrist implements UniqueAccount {
 
     @Override
     public BigDecimal getBalance(Currency currency, Set<Context> contexts) {
-        String uuidString = "";
+        String uuidString;
         if (uuid instanceof String){
             uuidString = (String)uuid;
         } else {
-            uuidString = ((UUID)uuid).toString();
+            uuidString = uuid.toString();
         }
         if(currency.getId().equals("coolpay:kristcurrency")){
-            BigDecimal balance = (BigDecimal) Coolpay.rootNode.getNode("players", uuidString, "balance").getValue();
-            return balance;
+            return (BigDecimal) Coolpay.rootNode.getNode("players", uuidString, "balance").getValue();
         }
         return null;
     }
 
     @Override
     public BigDecimal getBalance(Currency currency) {
-        String uuidString = "";
+        String uuidString;
         if (uuid instanceof String){
             uuidString = (String)uuid;
         } else {
-            uuidString = ((UUID)uuid).toString();
+            uuidString = uuid.toString();
         }
         if(currency.getId().equals("coolpay:kristcurrency")){
-            BigDecimal balance = (BigDecimal) Coolpay.rootNode.getNode("players", uuidString, "balance").getValue();
-            return balance;
+            return (BigDecimal) Coolpay.rootNode.getNode("players", uuidString, "balance").getValue();
         }
         return null;
     }
 
     @Override
     public Map<Currency, BigDecimal> getBalances(Set<Context> contexts) {
-        Map<Currency, BigDecimal> res = new HashMap<Currency,BigDecimal>();
+        Map<Currency, BigDecimal> res = new HashMap<>();
         res.put(new CurrencyKrist(), getBalance(new CurrencyKrist()));
         return res;
     }
 
     @Override
     public Map<Currency, BigDecimal> getBalances() {
-        Map<Currency, BigDecimal> res = new HashMap<Currency,BigDecimal>();
+        Map<Currency, BigDecimal> res = new HashMap<>();
         res.put(new CurrencyKrist(), getBalance(new CurrencyKrist()));
         return res;
     }
