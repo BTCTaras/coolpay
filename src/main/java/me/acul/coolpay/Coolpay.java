@@ -28,13 +28,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.Map;
 
 
 @Plugin(id = "coolpay", name = "CoolPay", version = "1.0")
 public class Coolpay {
-    //TODO: Economy integration
     private String randomString() {
 
         SecureRandom random = new SecureRandom();
@@ -82,10 +79,6 @@ public class Coolpay {
                 rootNode.getNode("Important information: ").setValue("DO NOT MODIFY ANYTHING IN THIS FILE!");
                 String pass = randomString();
                 rootNode.getNode("masterpass").setValue(pass);
-                //TODO: Remove this after testing
-                Map<String, String> addresses = Collections.emptyMap();
-                rootNode.getNode("addresses").setValue(addresses);
-
             }
 
             loader.save(rootNode);
