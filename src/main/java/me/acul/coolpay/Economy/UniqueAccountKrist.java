@@ -95,7 +95,9 @@ public class UniqueAccountKrist implements UniqueAccount {
 
     @Override
     public Map<Currency, BigDecimal> getBalances() {
-        return null;
+        Map<Currency, BigDecimal> res = new HashMap<Currency,BigDecimal>();
+        res.put(new CurrencyKrist(), getBalance(new CurrencyKrist()));
+        return res;
     }
 
     @Override
