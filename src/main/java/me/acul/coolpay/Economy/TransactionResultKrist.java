@@ -18,10 +18,16 @@ class TransactionResultKrist implements TransactionResult {
 
     private final Object Account;
     private final BigDecimal Amount;
+    private final Set<Context> Contexts;
+    private final ResultType Result;
+    private final TransactionType Type;
 
-    public TransactionResultKrist(Object Acc, BigDecimal amt) {
+    public TransactionResultKrist(Object Acc, BigDecimal amt, Set<Context> con, ResultType res, TransactionType t) {
         Account = Acc;
         Amount = amt;
+        Contexts = con;
+        Result = res;
+        Type = t;
     }
 
     @Override
@@ -41,16 +47,16 @@ class TransactionResultKrist implements TransactionResult {
 
     @Override
     public Set<Context> getContexts() {
-        return null;
+        return Contexts;
     }
 
     @Override
     public ResultType getResult() {
-        return null;
+        return Result;
     }
 
     @Override
     public TransactionType getType() {
-        return null;
+        return Type;
     }
 }

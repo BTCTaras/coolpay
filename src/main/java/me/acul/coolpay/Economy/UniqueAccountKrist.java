@@ -8,12 +8,13 @@ import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.account.Account;
 import org.spongepowered.api.service.economy.account.UniqueAccount;
-import org.spongepowered.api.service.economy.transaction.TransactionResult;
-import org.spongepowered.api.service.economy.transaction.TransferResult;
+import org.spongepowered.api.service.economy.transaction.*;
 import org.spongepowered.api.text.Text;
 
 import java.math.BigDecimal;
 import java.util.*;
+
+import static org.spongepowered.api.service.economy.transaction.TransactionTypes.*;
 
 /**
  * Created by Luca on 12.09.16.
@@ -100,12 +101,35 @@ class UniqueAccountKrist implements UniqueAccount {
 
     @Override
     public TransactionResult setBalance(Currency currency, BigDecimal amount, Cause cause, Set<Context> contexts) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(amount.intValue());
+        Coolpay.saveConfig();
+        return new TransactionResultKrist(uuid, amount, contexts, ResultType.SUCCESS, TransactionTypes.DEPOSIT);
     }
 
     @Override
     public TransactionResult setBalance(Currency currency, BigDecimal amount, Cause cause) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        int old = Coolpay.rootNode.getNode("players",uuidString,"balance").getInt();
+        Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(amount.intValue());
+        Coolpay.saveConfig();
+        TransactionType type;
+        if (old > amount.intValue()){
+            type = TransactionTypes.WITHDRAW;
+        } else {
+            type = TransactionTypes.DEPOSIT;
+        }
+        return new TransactionResultKrist(uuid, amount, null, ResultType.SUCCESS, type);
     }
 
     @Override
