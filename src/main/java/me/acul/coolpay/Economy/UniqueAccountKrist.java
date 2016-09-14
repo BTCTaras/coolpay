@@ -14,7 +14,7 @@ import org.spongepowered.api.text.Text;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static org.spongepowered.api.service.economy.transaction.TransactionTypes.*;
+import org.spongepowered.api.service.economy.transaction.TransactionTypes.*;
 
 /**
  * Created by Luca on 12.09.16.
@@ -134,42 +134,128 @@ class UniqueAccountKrist implements UniqueAccount {
 
     @Override
     public Map<Currency, TransactionResult> resetBalances(Cause cause, Set<Context> contexts) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        int old = Coolpay.rootNode.getNode("players",uuidString,"balance").getInt();
+        Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(getDefaultBalance(new CurrencyKrist()));
+        Coolpay.saveConfig();
+        Map<Currency,TransactionResult> res;
+        res = new HashMap<>();
+        res.put(new CurrencyKrist(), new TransactionResultKrist(uuid, new BigDecimal(old), contexts, ResultType.SUCCESS, TransactionTypes.WITHDRAW));
+        return res;
     }
 
     @Override
     public Map<Currency, TransactionResult> resetBalances(Cause cause) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        int old = Coolpay.rootNode.getNode("players",uuidString,"balance").getInt();
+        Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(getDefaultBalance(new CurrencyKrist()));
+        Coolpay.saveConfig();
+        Map<Currency,TransactionResult> res;
+        res = new HashMap<>();
+        res.put(new CurrencyKrist(), new TransactionResultKrist(uuid, new BigDecimal(old), null, ResultType.SUCCESS, TransactionTypes.WITHDRAW));
+        return res;
     }
 
     @Override
     public TransactionResult resetBalance(Currency currency, Cause cause, Set<Context> contexts) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        int old = Coolpay.rootNode.getNode("players",uuidString,"balance").getInt();
+        Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(getDefaultBalance(new CurrencyKrist()));
+        Coolpay.saveConfig();
+        return new TransactionResultKrist(uuid, new BigDecimal(old), contexts, ResultType.SUCCESS, TransactionTypes.WITHDRAW);
     }
 
     @Override
     public TransactionResult resetBalance(Currency currency, Cause cause) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        int old = Coolpay.rootNode.getNode("players",uuidString,"balance").getInt();
+        Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(getDefaultBalance(new CurrencyKrist()));
+        Coolpay.saveConfig();
+        return new TransactionResultKrist(uuid, new BigDecimal(old), null, ResultType.SUCCESS, TransactionTypes.WITHDRAW);
     }
 
     @Override
     public TransactionResult deposit(Currency currency, BigDecimal amount, Cause cause, Set<Context> contexts) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        int old = Coolpay.rootNode.getNode("players",uuidString,"balance").getInt();
+        Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(old + amount.intValue());
+        Coolpay.saveConfig();
+        return new TransactionResultKrist(uuid, amount, contexts, ResultType.SUCCESS, TransactionTypes.DEPOSIT);
     }
 
     @Override
     public TransactionResult deposit(Currency currency, BigDecimal amount, Cause cause) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        int old = Coolpay.rootNode.getNode("players",uuidString,"balance").getInt();
+        Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(old + amount.intValue());
+        Coolpay.saveConfig();
+        return new TransactionResultKrist(uuid, amount, null, ResultType.SUCCESS, TransactionTypes.DEPOSIT);
     }
 
     @Override
     public TransactionResult withdraw(Currency currency, BigDecimal amount, Cause cause, Set<Context> contexts) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        int old = Coolpay.rootNode.getNode("players",uuidString,"balance").getInt();
+        if (old >= amount.intValue()) {
+            Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(old + amount.intValue());
+            Coolpay.saveConfig();
+            return new TransactionResultKrist(uuid, amount, contexts, ResultType.SUCCESS, TransactionTypes.WITHDRAW);
+        } else {
+            return new TransactionResultKrist(uuid, amount, contexts, ResultType.ACCOUNT_NO_FUNDS, TransactionTypes.WITHDRAW);
+        }
     }
 
     @Override
     public TransactionResult withdraw(Currency currency, BigDecimal amount, Cause cause) {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        int old = Coolpay.rootNode.getNode("players",uuidString,"balance").getInt();
+        if (old >= amount.intValue()) {
+            Coolpay.rootNode.getNode("players", uuidString, "balance").setValue(old + amount.intValue());
+            Coolpay.saveConfig();
+            return new TransactionResultKrist(uuid, amount, null, ResultType.SUCCESS, TransactionTypes.WITHDRAW);
+        } else {
+            return new TransactionResultKrist(uuid, amount, null, ResultType.ACCOUNT_NO_FUNDS, TransactionTypes.WITHDRAW);
+        }
     }
 
     @Override
@@ -184,7 +270,13 @@ class UniqueAccountKrist implements UniqueAccount {
 
     @Override
     public String getIdentifier() {
-        return null;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        return uuidString;
     }
 
     @Override
