@@ -27,6 +27,16 @@ class UniqueAccountKrist implements UniqueAccount {
 
     public UniqueAccountKrist(Object id) {
         uuid = id;
+        String uuidString;
+        if (uuid instanceof String){
+            uuidString = (String)uuid;
+        } else {
+            uuidString = uuid.toString();
+        }
+        if(Coolpay.rootNode.getNode("players",uuidString,"balance").isVirtual()){
+            Coolpay.rootNode.getNode("players",uuidString,"balance").setValue(0);
+            Coolpay.saveConfig();
+        }
     }
 
     @Override
@@ -259,7 +269,7 @@ class UniqueAccountKrist implements UniqueAccount {
     }
 
     @Override
-    public TransferResult transfer(Account to, Currency currency, BigDecimal amount, Cause cause, Set<Context> contexts) {
+    public TransferResult transfer (Account to, Currency currency, BigDecimal amount, Cause cause, Set<Context> contexts) {
         return null;
     }
 
