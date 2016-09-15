@@ -13,15 +13,15 @@ import java.util.Set;
 /**
  * Created by Luca on 14.09.16.
  */
-public class TransferResultKrist implements TransferResult {
+class TransferResultKrist implements TransferResult {
 
-    Object to;
-    Object from;
-    Currency cur;
-    BigDecimal amt;
-    Set<Context> contexts;
-    ResultType res;
-    TransactionType trans;
+    private final Object to;
+    private final Object from;
+    private final Currency cur;
+    private final BigDecimal amt;
+    private final Set<Context> contexts;
+    private final ResultType res;
+    private final TransactionType trans;
 
     public TransferResultKrist(Object t, Object f, Currency c, BigDecimal a, Set<Context> co, ResultType r, TransactionType tt) {
         to = t;

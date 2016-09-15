@@ -14,8 +14,6 @@ import org.spongepowered.api.text.Text;
 import java.math.BigDecimal;
 import java.util.*;
 
-import org.spongepowered.api.service.economy.transaction.TransactionTypes.*;
-
 /**
  * Created by Luca on 12.09.16.
  */
