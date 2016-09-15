@@ -14,38 +14,58 @@ import java.util.Set;
  * Created by Luca on 14.09.16.
  */
 public class TransferResultKrist implements TransferResult {
+
+    Object to;
+    Object from;
+    Currency cur;
+    BigDecimal amt;
+    Set<Context> contexts;
+    ResultType res;
+    TransactionType trans;
+
+    public TransferResultKrist(Object t, Object f, Currency c, BigDecimal a, Set<Context> co, ResultType r, TransactionType tt) {
+        to = t;
+        from = f;
+        cur = c;
+        amt = a;
+        contexts = co;
+        res = r;
+        trans = tt;
+
+    }
+
     @Override
     public Account getAccountTo() {
-        return null;
+        return new UniqueAccountKrist(to);
     }
 
     @Override
     public Account getAccount() {
-        return null;
+        return new UniqueAccountKrist(from);
     }
 
     @Override
     public Currency getCurrency() {
-        return null;
+        return cur;
     }
 
     @Override
     public BigDecimal getAmount() {
-        return null;
+        return amt;
     }
 
     @Override
     public Set<Context> getContexts() {
-        return null;
+        return contexts;
     }
 
     @Override
     public ResultType getResult() {
-        return null;
+        return res;
     }
 
     @Override
     public TransactionType getType() {
-        return null;
+        return trans;
     }
 }
