@@ -1,4 +1,4 @@
-package me.acul.coolpay.Economy;
+package me.acul.coolpay.economy;
 
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.economy.Currency;

@@ -1,4 +1,4 @@
-package me.acul.coolpay.Economy;
+package me.acul.coolpay.economy;
 
 import me.acul.coolpay.Coolpay;
 import org.spongepowered.api.Sponge;
