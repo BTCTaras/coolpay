@@ -5,6 +5,7 @@ import me.acul.coolpay.commands.Balance;
 import me.acul.coolpay.commands.Deposit;
 import me.acul.coolpay.commands.Pay;
 import me.acul.coolpay.commands.Withdraw;
+import me.acul.coolpay.economy.EconomyServiceKrist;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -16,11 +17,13 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
@@ -62,6 +65,11 @@ public class Coolpay {
             e.printStackTrace();
         }
 
+    }
+
+    @Listener
+    public void onPreInit(GamePreInitializationEvent e){
+        Sponge.getServiceManager().setProvider(this, EconomyService.class, new EconomyServiceKrist());
     }
 
     @SuppressWarnings({"unused", "UnusedParameters"})
