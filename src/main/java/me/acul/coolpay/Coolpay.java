@@ -146,7 +146,8 @@ public class Coolpay {
     }
 
     public static String formatKST(int amt){
-        formatter.format(Locale.ENGLISH, "&,d KST", amt);
+        formatter.flush();
+        formatter.format(Locale.ENGLISH, "%,d KST", amt);
         return formatter.toString();
     }
 
