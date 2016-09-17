@@ -18,7 +18,7 @@ public class Balance implements CommandExecutor {
             Player p = (Player) src;
             String uuid = p.getUniqueId().toString();
             int balance = (int) Coolpay.rootNode.getNode("players", uuid, "balance").getValue();
-            p.sendMessage(Text.builder("[CoolPay] Your balance: " + String.format("%,d KST", balance)).color(TextColors.GREEN).build());
+            p.sendMessage(Text.builder("[CoolPay] Your balance: " + Coolpay.formatKST(balance)).color(TextColors.GREEN).build());
         }
 
         return CommandResult.success();

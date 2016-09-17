@@ -35,8 +35,8 @@ public class Pay implements CommandExecutor {
                     Coolpay.rootNode.getNode("players", to.getUniqueId().toString(), "balance").setValue(old + amt);
                     int oldf = Coolpay.rootNode.getNode("players", fromUUID, "balance").getInt();
                     Coolpay.rootNode.getNode("players", fromUUID, "balance").setValue(oldf - amt);
-                    to.sendMessage(Text.builder("[CoolPay] " + ex.getName() + " sent you " + String.format("%,d", amt) + " KST").color(TextColors.GREEN).build());
-                    ex.sendMessage(Text.builder("[CoolPay] " + String.format("%,d", amt) + " KST successfully sent to " + to.getName()).color(TextColors.GREEN).build());
+                    to.sendMessage(Text.builder("[CoolPay] " + ex.getName() + " sent you " + Coolpay.formatKST(amt) + " KST").color(TextColors.GREEN).build());
+                    ex.sendMessage(Text.builder("[CoolPay] " + Coolpay.formatKST(amt) + " successfully sent to " + to.getName()).color(TextColors.GREEN).build());
                     Coolpay.saveConfig();
                 } else {
                     ex.sendMessage(Text.builder("[CoolPay] You don't have enough KST").color(TextColors.RED).build());

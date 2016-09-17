@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.security.SecureRandom;
+import java.util.Formatter;
+import java.util.Locale;
 
 
 @Plugin(id = "coolpay", name = "CoolPay", version = "1.0")
@@ -59,6 +61,7 @@ public class Coolpay {
     public static ConfigurationNode rootNode;
 
     public static int masterwallet;
+    public static Formatter formatter;
 
     public static void saveConfig() {
         try {
@@ -80,6 +83,7 @@ public class Coolpay {
         File co = new File(config.toString(), "coolpay_data.conf");
         logger.info("Initialising, please wait...");
         loader = HoconConfigurationLoader.builder().setPath(co.toPath()).build();
+        formatter = new Formatter(new StringBuffer(), Locale.ENGLISH);
         try {
 
             rootNode = loader.load();
@@ -139,6 +143,11 @@ public class Coolpay {
         floating.execute(new FloatingScheduler());
         floating.submit(this);
 
+    }
+
+    public static String formatKST(int amt){
+        formatter.format(Locale.ENGLISH, "&,d KST", amt);
+        return formatter.toString();
     }
 
     @SuppressWarnings("unused")

@@ -1,5 +1,6 @@
 package me.acul.coolpay.economy;
 
+import me.acul.coolpay.Coolpay;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.text.Text;
 
@@ -28,7 +29,7 @@ class CurrencyKrist implements Currency {
 
     @Override
     public Text format(BigDecimal amount, int numFractionDigits) {
-        return Text.of(String.format("%,d", amount.intValueExact()) + " " + getSymbol());
+        return Text.of(Coolpay.formatKST(amount.intValue()));
     }
 
     @Override

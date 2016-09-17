@@ -66,7 +66,7 @@ class FloatingScheduler implements Runnable {
 
                         if (p.isPresent()) {
 
-                            p.get().sendMessage(Text.builder("[CoolPay] 15,000 KST have been transferred to your account, " + String.format("%,d KST", in - 15000) + " still floating.").color(TextColors.GREEN).build());
+                            p.get().sendMessage(Text.builder("[CoolPay] 15,000 KST have been transferred to your account, " + Coolpay.formatKST(in - 15000) + " still floating.").color(TextColors.GREEN).build());
 
                         }
 
@@ -79,7 +79,7 @@ class FloatingScheduler implements Runnable {
 
                         if (p.isPresent()) {
 
-                            p.get().sendMessage(Text.builder("[CoolPay] " + String.format("%,d KST", in) + " have been transferred to your account. 0 KST still floating.").color(TextColors.GREEN).build());
+                            p.get().sendMessage(Text.builder("[CoolPay] " + Coolpay.formatKST(in) + " have been transferred to your account. 0 KST still floating.").color(TextColors.GREEN).build());
 
                         }
                     }
@@ -103,7 +103,7 @@ class FloatingScheduler implements Runnable {
 
                                 if (p.isPresent()) {
 
-                                    p.get().sendMessage(Text.builder("[CoolPay] 15,000 KST have been transferred to " + to + " " + String.format("%,d KST", amount - 15000) + " still floating.").color(TextColors.GREEN).build());
+                                    p.get().sendMessage(Text.builder("[CoolPay] 15,000 KST have been transferred to " + to + " " +Coolpay.formatKST(amount - 15000) + " still floating.").color(TextColors.GREEN).build());
 
                                 }
 
@@ -119,7 +119,7 @@ class FloatingScheduler implements Runnable {
 
                                 if (p.isPresent()) {
 
-                                    p.get().sendMessage(Text.builder("[CoolPay] " + String.format("%,d KST", amount) + " have been transferred to " + to + " 0 KST still floating.").color(TextColors.GREEN).build());
+                                    p.get().sendMessage(Text.builder("[CoolPay] " + Coolpay.formatKST(amount) + " have been transferred to " + to + " 0 KST still floating.").color(TextColors.GREEN).build());
 
                                 }
 
