@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 /**
  * Created by Luca on 12.09.16.
  */
-@SuppressWarnings("DefaultFileTemplate")
+@SuppressWarnings({"DefaultFileTemplate", "unused"})
 class CurrencyKrist implements Currency {
 
     @Override

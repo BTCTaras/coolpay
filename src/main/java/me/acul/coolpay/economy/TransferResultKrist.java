@@ -5,6 +5,7 @@ import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.account.Account;
 import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.service.economy.transaction.TransactionType;
+import org.spongepowered.api.service.economy.transaction.TransactionTypes;
 import org.spongepowered.api.service.economy.transaction.TransferResult;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.Set;
 /**
  * Created by Luca on 14.09.16.
  */
+@SuppressWarnings({"unused", "DefaultFileTemplate"})
 class TransferResultKrist implements TransferResult {
 
     private final Object to;
@@ -23,14 +25,14 @@ class TransferResultKrist implements TransferResult {
     private final ResultType res;
     private final TransactionType trans;
 
-    public TransferResultKrist(Object t, Object f, Currency c, BigDecimal a, Set<Context> co, ResultType r, TransactionType tt) {
+    public TransferResultKrist(Object t, Object f, Currency c, BigDecimal a, Set<Context> co, ResultType r) {
         to = t;
         from = f;
         cur = c;
         amt = a;
         contexts = co;
         res = r;
-        trans = tt;
+        trans = TransactionTypes.TRANSFER;
 
     }
 

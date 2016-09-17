@@ -13,7 +13,7 @@ import java.util.*;
  * Created by Luca on 12.09.16.
  */
 @SuppressWarnings("DefaultFileTemplate")
-public class EconomyServiceKrist implements EconomyService{
+public class EconomyServiceKrist implements EconomyService {
     @Override
     public Currency getDefaultCurrency() {
         return new CurrencyKrist();

@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Created by Luca on 12.09.16.
  */
-@SuppressWarnings("DefaultFileTemplate")
+@SuppressWarnings({"DefaultFileTemplate", "unused"})
 class TransactionResultKrist implements TransactionResult {
 
     private final Object Account;

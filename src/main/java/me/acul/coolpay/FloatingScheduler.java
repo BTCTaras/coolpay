@@ -84,7 +84,7 @@ class FloatingScheduler implements Runnable {
                         }
                     }
                 }
-                if(!Coolpay.rootNode.getNode("floating",uuid,"out").isVirtual()){
+                if (!Coolpay.rootNode.getNode("floating", uuid, "out").isVirtual()) {
                     Map<String, Integer> out = (Map) Coolpay.rootNode.getNode("floating", uuid, "out").getValue();
                     for (Object i : out.entrySet()) {
 
@@ -103,12 +103,12 @@ class FloatingScheduler implements Runnable {
 
                                 if (p.isPresent()) {
 
-                                    p.get().sendMessage(Text.builder("[CoolPay] 15,000 KST have been transferred to " + to + " " +Coolpay.formatKST(amount - 15000) + " still floating.").color(TextColors.GREEN).build());
+                                    p.get().sendMessage(Text.builder("[CoolPay] 15,000 KST have been transferred to " + to + " " + Coolpay.formatKST(amount - 15000) + " still floating.").color(TextColors.GREEN).build());
 
                                 }
 
                             }
-                        } else if(amount > 0) {
+                        } else if (amount > 0) {
                             TransactionResult res = Krist.transact(Coolpay.rootNode.getNode("masterpass").getString(), to, amount);
                             if (res.ok) {
 

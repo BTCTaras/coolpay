@@ -46,7 +46,7 @@ public class Krist {
         JSONObject json = (JSONObject) new JSONTokener(returnData).nextValue();
         TransactionResult success = new TransactionResult();
         success.ok = json.getBoolean("ok");
-        if(!success.ok) {
+        if (!success.ok) {
             success.error = json.getString("error");
         }
         return success;

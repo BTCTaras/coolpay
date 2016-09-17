@@ -37,7 +37,18 @@ import java.util.Locale;
 
 @Plugin(id = "coolpay", name = "CoolPay", version = "1.0")
 public class Coolpay {
-    private String randomString() {
+    public static ConfigurationNode rootNode;
+    public static int masterwallet;
+    private static ConfigurationLoader<CommentedConfigurationNode> loader;
+    private static Formatter formatter;
+    private final Scheduler scheduler = Sponge.getScheduler();
+    @Inject
+    private final Logger logger = null;
+    @Inject
+    @ConfigDir(sharedRoot = true)
+    private final Path config = null;
+
+    public static String randomString() {
 
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder();
@@ -51,18 +62,6 @@ public class Coolpay {
         return sb.toString();
     }
 
-    private final Scheduler scheduler = Sponge.getScheduler();
-    @Inject
-    private final Logger logger = null;
-    private static ConfigurationLoader<CommentedConfigurationNode> loader;
-    @Inject
-    @ConfigDir(sharedRoot = true)
-    private final Path config = null;
-    public static ConfigurationNode rootNode;
-
-    public static int masterwallet;
-    public static Formatter formatter;
-
     public static void saveConfig() {
         try {
             loader.save(rootNode);
@@ -72,8 +71,15 @@ public class Coolpay {
 
     }
 
+    public static String formatKST(int amt) {
+        formatter.flush();
+        formatter.format(Locale.ENGLISH, "%,d KST", amt);
+        return formatter.toString();
+    }
+
+    @SuppressWarnings("UnusedParameters")
     @Listener
-    public void onPreInit(GamePreInitializationEvent e){
+    public void onPreInit(GamePreInitializationEvent e) {
         Sponge.getServiceManager().setProvider(this, EconomyService.class, new EconomyServiceKrist());
     }
 
@@ -143,12 +149,6 @@ public class Coolpay {
         floating.execute(new FloatingScheduler());
         floating.submit(this);
 
-    }
-
-    public static String formatKST(int amt){
-        formatter.flush();
-        formatter.format(Locale.ENGLISH, "%,d KST", amt);
-        return formatter.toString();
     }
 
     @SuppressWarnings("unused")
