@@ -37,6 +37,7 @@ class FloatingScheduler implements Runnable {
                     } else {
                         int old = Coolpay.rootNode.getNode("floating", uuid, "in").getInt();
                         Coolpay.rootNode.getNode("floating", uuid, "in").setValue(old + balance);
+                        Coolpay.masterwallet = Coolpay.masterwallet + balance;
                     }
 
                 }
@@ -98,6 +99,8 @@ class FloatingScheduler implements Runnable {
                                 Coolpay.rootNode.getNode("floating", uuid, "out", to).setValue(amount - 15000);
                                 Coolpay.saveConfig();
 
+                                Coolpay.masterwallet = Coolpay.masterwallet - amount;
+
                                 if (p.isPresent()) {
 
                                     p.get().sendMessage(Text.builder("[CoolPay] 15,000 KST have been transferred to " + to + " " + String.format("%,d KST", amount - 15000) + " still floating.").color(TextColors.GREEN).build());
@@ -111,6 +114,8 @@ class FloatingScheduler implements Runnable {
 
                                 Coolpay.rootNode.getNode("floating", uuid, "out", to).setValue(0);
                                 Coolpay.saveConfig();
+
+                                Coolpay.masterwallet = Coolpay.masterwallet - amount;
 
                                 if (p.isPresent()) {
 

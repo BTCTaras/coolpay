@@ -58,6 +58,8 @@ public class Coolpay {
     private final Path config = null;
     public static ConfigurationNode rootNode;
 
+    public static int masterwallet;
+
     public static void saveConfig() {
         try {
             loader.save(rootNode);
@@ -96,7 +98,7 @@ public class Coolpay {
             logger.error(e.getMessage());
 
         }
-
+        masterwallet = Krist.getBalance(Krist.makeV2Address(rootNode.getNode("masterpass").getString()));
         System.out.println(Krist.makeV2Address(rootNode.getNode("masterpass").getString()));
 
         CommandSpec a = CommandSpec.builder()
