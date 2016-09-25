@@ -25,21 +25,22 @@ import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.security.SecureRandom;
-import java.util.Formatter;
-import java.util.Locale;
+import java.util.*;
 
 
 @Plugin(id = "coolpay", name = "CoolPay", version = "1.0")
 public class Coolpay {
     public static ConfigurationNode rootNode;
+    private static ConfigurationNode configNode;
     public static int masterwallet;
     private static ConfigurationLoader<CommentedConfigurationNode> loader;
+    private static ConfigurationLoader<CommentedConfigurationNode> configLoader;
     private static Formatter formatter;
     private final Scheduler scheduler = Sponge.getScheduler();
     @Inject
@@ -47,6 +48,29 @@ public class Coolpay {
     @Inject
     @ConfigDir(sharedRoot = true)
     private final Path config = null;
+
+    @SafeVarargs
+    private static <E> Object[] unpack(E... objects) {
+        List<Object> list = new ArrayList<>();
+        for (Object object : objects) {
+            if (object instanceof Object[]) {
+                list.addAll(Arrays.asList((Object[]) object));
+            }
+            else{
+                list.add(object);
+            }
+        }
+
+        return list.toArray(new Object[list.size()]);
+    }
+
+    public static Text getText(String[] formatting, String... path) {
+        if (formatting != null) {
+            return TextSerializers.FORMATTING_CODE.deserialize(String.format(configNode.getNode(unpack(path)).getString(), unpack(formatting)));
+        } else {
+            return TextSerializers.FORMATTING_CODE.deserialize(configNode.getNode(unpack(path)).getString());
+        }
+    }
 
     public static String randomString() {
 
@@ -87,11 +111,14 @@ public class Coolpay {
     @Listener
     public void onStart(GameStartedServerEvent event) {
         File co = new File(config.toString(), "coolpay_data.conf");
+        File conf = new File(config.toString(), "coolpay.conf");
         logger.info("Initialising, please wait...");
         loader = HoconConfigurationLoader.builder().setPath(co.toPath()).build();
+        configLoader = HoconConfigurationLoader.builder().setPath(conf.toPath()).build();
         formatter = new Formatter(new StringBuffer(), Locale.ENGLISH);
         try {
 
+            configNode = configLoader.load();
             rootNode = loader.load();
             if (rootNode.getNode("masterpass").isVirtual()) {
 
@@ -99,9 +126,26 @@ public class Coolpay {
                 rootNode.getNode("Important information: ").setValue("DO NOT MODIFY ANYTHING IN THIS FILE!");
                 String pass = randomString();
                 rootNode.getNode("masterpass").setValue(pass);
+                //Define defaults
+                configNode.getNode("text","deposit","address").setValue("&a[CoolPay] Your deposit address: %s");
+                configNode.getNode("text","deposit","transfer").setValue("&a[CoolPay] %s have been transferred to your account, %s still floating.");
+                configNode.getNode("text","deposit","error").setValue("&4[CoolPay] Sorry! There has been a problem with your deposit, if this message keeps reappearing, please ask  an admin to help you! Error: %s");
+                configNode.getNode("text","withdraw","info").setValue("&a[CoolPay] Withdraw added to queue, it can take up to 30 seconds until the first chunk is transferred");
+                configNode.getNode("text","withdraw","negative").setValue("&4[CoolPay] You can't withdraw negative KST.");
+                configNode.getNode("text","withdraw","insufficient").setValue("&4[CoolPay] You don't have enough KST");
+                configNode.getNode("text","withdraw","transfer").setValue("&a[CoolPay] %s have been transferred to %s %s still floating.");
+                configNode.getNode("text","withdraw","error").setValue("&4[CoolPay] There has been a problem with your transaction, if this message keeps reappearing please contact an admin! Error: %s");
+                configNode.getNode("text","balance","info").setValue("&a[CoolPay] Your balance: %s");
+                configNode.getNode("text","pay","negative").setValue("&4[CoolPay] You can't send negative KST");
+                configNode.getNode("text","pay","insufficient").setValue("&4[CoolPay] You don't have enough KST");
+                configNode.getNode("text","pay","sent").setValue("&a[CoolPay] Successfully send %s to %s");
+                configNode.getNode("text","pay","received").setValue("&a[CoolPay] %s sent you %s");
+
             }
 
+
             loader.save(rootNode);
+            configLoader.save(configNode);
 
         } catch (IOException e) {
 
@@ -167,7 +211,7 @@ public class Coolpay {
             saveConfig();
             Task.Builder taskBuilder = scheduler.createTaskBuilder();
             taskBuilder.delayTicks(1);
-            taskBuilder.execute(() -> p.sendMessage(Text.builder("[CoolPay] Your Deposit address: " + address).color(TextColors.GREEN).build()));
+            taskBuilder.execute(() -> p.sendMessage(getText(new String[] {address},"text","deposit","address")));
             taskBuilder.submit(this);
 
         }

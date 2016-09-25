@@ -26,7 +26,7 @@ public class Withdraw implements CommandExecutor {
                 String uuid = ex.getUniqueId().toString();
                 Integer balance = Coolpay.rootNode.getNode("players", uuid, "balance").getInt();
                 if (transfer < 0) {
-                    ex.sendMessage(Text.builder("[CoolPay] You can't withdraw negative KST.").color(TextColors.RED).build());
+                    ex.sendMessage(Coolpay.getText(null, "text","withdraw","negative"));
                     return CommandResult.success();
                 }
 
@@ -35,12 +35,13 @@ public class Withdraw implements CommandExecutor {
                     Coolpay.rootNode.getNode("floating", uuid, "out", to).setValue(old + transfer);
                     Coolpay.rootNode.getNode("players", uuid, "balance").setValue(balance - transfer);
                     Coolpay.saveConfig();
+                    ex.sendMessage(Coolpay.getText(null, "text","withdraw","info"));
                 } else {
-                    ex.sendMessage(Text.builder("[CoolPay] You don't have enough balance").color(TextColors.RED).build());
+                    ex.sendMessage(Coolpay.getText(null,"text","withdraw","insufficient"));
                 }
 
             } else {
-                ex.sendMessage(Text.builder("[CoolPay] Usage: /Withdraw <amount> <address>").color(TextColors.RED).build());
+                ex.sendMessage(Text.builder("[CoolPay] Usage: /withdraw <amount> <address>").color(TextColors.RED).build());
             }
 
         }

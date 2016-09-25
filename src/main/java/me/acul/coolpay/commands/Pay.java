@@ -26,7 +26,7 @@ public class Pay implements CommandExecutor {
                 Integer amt = amount.get();
                 String fromUUID = ex.getUniqueId().toString();
                 if (amt < 0) {
-                    ex.sendMessage(Text.builder("[CoolPay] You can't send negative KST").color(TextColors.RED).build());
+                    ex.sendMessage(Coolpay.getText(null, "text","pay","negative"));
                     return CommandResult.success();
                 }
 
@@ -35,11 +35,11 @@ public class Pay implements CommandExecutor {
                     Coolpay.rootNode.getNode("players", to.getUniqueId().toString(), "balance").setValue(old + amt);
                     int oldf = Coolpay.rootNode.getNode("players", fromUUID, "balance").getInt();
                     Coolpay.rootNode.getNode("players", fromUUID, "balance").setValue(oldf - amt);
-                    to.sendMessage(Text.builder("[CoolPay] " + ex.getName() + " sent you " + Coolpay.formatKST(amt) + " KST").color(TextColors.GREEN).build());
-                    ex.sendMessage(Text.builder("[CoolPay] " + Coolpay.formatKST(amt) + " successfully sent to " + to.getName()).color(TextColors.GREEN).build());
+                    to.sendMessage(Coolpay.getText(new String[]{Coolpay.formatKST(amt), ex.getName()}, "text","pay","received"));
+                    ex.sendMessage(Coolpay.getText(new String[]{Coolpay.formatKST(amt), to.getName()}, "text","pay","sent"));
                     Coolpay.saveConfig();
                 } else {
-                    ex.sendMessage(Text.builder("[CoolPay] You don't have enough KST").color(TextColors.RED).build());
+                    ex.sendMessage(Coolpay.getText(null, "text", "pay", "insufficient"));
                 }
 
             } else {

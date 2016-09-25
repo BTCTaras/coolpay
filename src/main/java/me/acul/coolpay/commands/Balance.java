@@ -7,8 +7,6 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
 
 
 @SuppressWarnings("unused")
@@ -19,7 +17,7 @@ public class Balance implements CommandExecutor {
             Player p = (Player) src;
             String uuid = p.getUniqueId().toString();
             int balance = (int) Coolpay.rootNode.getNode("players", uuid, "balance").getValue();
-            p.sendMessage(Text.builder("[CoolPay] Your balance: " + Coolpay.formatKST(balance)).color(TextColors.GREEN).build());
+            p.sendMessage(Coolpay.getText(new String[] {Coolpay.formatKST(balance)}, "text","balance","info"));
         }
 
         return CommandResult.success();

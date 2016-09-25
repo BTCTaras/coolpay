@@ -2,8 +2,6 @@ package me.acul.coolpay;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -31,7 +29,7 @@ class FloatingScheduler implements Runnable {
                     if (!res.ok) {
                         Optional<Player> p = Sponge.getServer().getPlayer(UUID.fromString(uuid));
                         if (p.isPresent()) {
-                            p.get().sendMessage(Text.builder("[CoolPay] Sorry! There has been a problem with your deposit, if this message keeps reappearing, please ask  an admin to help you! Error: " + res.error).color(TextColors.RED).build());
+                            p.get().sendMessage(Coolpay.getText(new String[]{res.error}, "text", "deposit", "error"));
                         }
 
                     } else {
@@ -66,7 +64,7 @@ class FloatingScheduler implements Runnable {
 
                         if (p.isPresent()) {
 
-                            p.get().sendMessage(Text.builder("[CoolPay] 15,000 KST have been transferred to your account, " + Coolpay.formatKST(in - 15000) + " still floating.").color(TextColors.GREEN).build());
+                            p.get().sendMessage(Coolpay.getText(new String[] {"15,000 KST", Coolpay.formatKST(in - 15000)}, "text","deposit","transfer"));
 
                         }
 
@@ -79,7 +77,7 @@ class FloatingScheduler implements Runnable {
 
                         if (p.isPresent()) {
 
-                            p.get().sendMessage(Text.builder("[CoolPay] " + Coolpay.formatKST(in) + " have been transferred to your account. 0 KST still floating.").color(TextColors.GREEN).build());
+                            p.get().sendMessage(Coolpay.getText(new String[] {Coolpay.formatKST(in), "0 KST"}, "text","deposit","transfer"));
 
                         }
                     }
@@ -103,7 +101,7 @@ class FloatingScheduler implements Runnable {
 
                                 if (p.isPresent()) {
 
-                                    p.get().sendMessage(Text.builder("[CoolPay] 15,000 KST have been transferred to " + to + " " + Coolpay.formatKST(amount - 15000) + " still floating.").color(TextColors.GREEN).build());
+                                    p.get().sendMessage(Coolpay.getText(new String[]{"15,000 KST", to, Coolpay.formatKST(amount-15000)}, "text","withdraw","transfer"));
 
                                 }
 
@@ -119,7 +117,7 @@ class FloatingScheduler implements Runnable {
 
                                 if (p.isPresent()) {
 
-                                    p.get().sendMessage(Text.builder("[CoolPay] " + Coolpay.formatKST(amount) + " have been transferred to " + to + " 0 KST still floating.").color(TextColors.GREEN).build());
+                                    p.get().sendMessage(Coolpay.getText(new String[]{Coolpay.formatKST(amount), to, "0 KST"}, "text","withdraw","transfer"));
 
                                 }
 
@@ -127,7 +125,7 @@ class FloatingScheduler implements Runnable {
 
                                 if (p.isPresent()) {
 
-                                    p.get().sendMessage(Text.builder("[CoolPay] There has been a problem with your transaction, if this message keeps reappearing please contact an admin! Error: " + res.error).color(TextColors.RED).build());
+                                    p.get().sendMessage(Coolpay.getText(new String[] {res.error}, "text","withdraw","error"));
 
                                 }
                             }
