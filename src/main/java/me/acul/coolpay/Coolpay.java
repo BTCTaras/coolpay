@@ -37,7 +37,7 @@ import java.util.*;
 @Plugin(id = "coolpay", name = "CoolPay", version = "1.0")
 public class Coolpay {
     public static ConfigurationNode rootNode;
-    private static ConfigurationNode configNode;
+    public static ConfigurationNode configNode;
     public static int masterwallet;
     private static ConfigurationLoader<CommentedConfigurationNode> loader;
     private static ConfigurationLoader<CommentedConfigurationNode> configLoader;
@@ -130,16 +130,23 @@ public class Coolpay {
                 configNode.getNode("text","deposit","address").setValue("&a[CoolPay] Your deposit address: %s");
                 configNode.getNode("text","deposit","transfer").setValue("&a[CoolPay] %s have been transferred to your account, %s still floating.");
                 configNode.getNode("text","deposit","error").setValue("&4[CoolPay] Sorry! There has been a problem with your deposit, if this message keeps reappearing, please ask  an admin to help you! Error: %s");
+                configNode.getNode("text","deposit","disabled").setValue("&4[CoolPay] Deposits have been disabled!");
                 configNode.getNode("text","withdraw","info").setValue("&a[CoolPay] Withdraw added to queue, it can take up to 30 seconds until the first chunk is transferred");
                 configNode.getNode("text","withdraw","negative").setValue("&4[CoolPay] You can't withdraw negative KST.");
                 configNode.getNode("text","withdraw","insufficient").setValue("&4[CoolPay] You don't have enough KST");
                 configNode.getNode("text","withdraw","transfer").setValue("&a[CoolPay] %s have been transferred to %s %s still floating.");
                 configNode.getNode("text","withdraw","error").setValue("&4[CoolPay] There has been a problem with your transaction, if this message keeps reappearing please contact an admin! Error: %s");
+                configNode.getNode("text","withdraw","disabled").setValue("&4[CoolPay] Withdraws have been disabled!");
                 configNode.getNode("text","balance","info").setValue("&a[CoolPay] Your balance: %s");
                 configNode.getNode("text","pay","negative").setValue("&4[CoolPay] You can't send negative KST");
                 configNode.getNode("text","pay","insufficient").setValue("&4[CoolPay] You don't have enough KST");
                 configNode.getNode("text","pay","sent").setValue("&a[CoolPay] Successfully send %s to %s");
                 configNode.getNode("text","pay","received").setValue("&a[CoolPay] %s sent you %s");
+
+                configNode.getNode("disabled","deposit").setValue(false);
+                configNode.getNode("disabled","withdraw").setValue(false);
+
+                configNode.getNode("refreshTime").setValue(30);
 
             }
 
@@ -188,7 +195,7 @@ public class Coolpay {
         Sponge.getCommandManager().register(this, d, "withdraw");
 
         Task.Builder floating = scheduler.createTaskBuilder();
-        floating.intervalTicks(600);
+        floating.intervalTicks(configNode.getNode("refreshTime").getInt()*20);
         floating.delayTicks(0);
         floating.execute(new FloatingScheduler());
         floating.submit(this);

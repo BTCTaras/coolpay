@@ -23,19 +23,27 @@ class FloatingScheduler implements Runnable {
                 String address = Krist.makeV2Address(Coolpay.rootNode.getNode("players", uuid, "pass").getString());
                 int balance = Krist.getBalance(address);
                 if (balance > 0) {
-                    String master = Krist.makeV2Address(Coolpay.rootNode.getNode("masterpass").getString());
-                    System.out.println("Transmitted " + balance + " from " + address + " to " + master);
-                    TransactionResult res = Krist.transact(Coolpay.rootNode.getNode("players", uuid, "pass").getString(), master, balance);
-                    if (!res.ok) {
+                    if (!Coolpay.configNode.getNode("disabled","deposit").getBoolean()) {
+                        String master = Krist.makeV2Address(Coolpay.rootNode.getNode("masterpass").getString());
+                        System.out.println("Transmitted " + balance + " from " + address + " to " + master);
+                        TransactionResult res = Krist.transact(Coolpay.rootNode.getNode("players", uuid, "pass").getString(), master, balance);
+                        if (!res.ok) {
+                            Optional<Player> p = Sponge.getServer().getPlayer(UUID.fromString(uuid));
+                            if (p.isPresent()) {
+                                p.get().sendMessage(Coolpay.getText(new String[]{res.error}, "text", "deposit", "error"));
+                            }
+
+                        } else {
+                            int old = Coolpay.rootNode.getNode("floating", uuid, "in").getInt();
+                            Coolpay.rootNode.getNode("floating", uuid, "in").setValue(old + balance);
+                            Coolpay.masterwallet = Coolpay.masterwallet + balance;
+                        }
+                    } else {
                         Optional<Player> p = Sponge.getServer().getPlayer(UUID.fromString(uuid));
                         if (p.isPresent()) {
-                            p.get().sendMessage(Coolpay.getText(new String[]{res.error}, "text", "deposit", "error"));
+                            p.get().sendMessage(Coolpay.getText(null, "text", "deposit", "disabled"));
                         }
-
-                    } else {
-                        int old = Coolpay.rootNode.getNode("floating", uuid, "in").getInt();
-                        Coolpay.rootNode.getNode("floating", uuid, "in").setValue(old + balance);
-                        Coolpay.masterwallet = Coolpay.masterwallet + balance;
+                        Krist.transact(Coolpay.rootNode.getNode("masterpass").getString(), Krist.makeV2Address(Coolpay.rootNode.getNode("players", uuid, "pass").getString()), balance);
                     }
 
                 }
